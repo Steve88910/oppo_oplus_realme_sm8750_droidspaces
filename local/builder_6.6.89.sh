@@ -96,7 +96,7 @@ echo ">>> 初始化仓库..."
 rm -rf kernel_workspace
 mkdir kernel_workspace
 cd kernel_workspace
-git clone --depth=1 https://github.com/cctv18/android_kernel_common_oneplus_sm8750 -b oneplus/sm8750_v_16.0.0_oneplus_13_6.6.89 common
+git clone --depth=1 https://v6.gh-proxy.org/https://github.com/cctv18/android_kernel_common_oneplus_sm8750 -b oneplus/sm8750_v_16.0.0_oneplus_13_6.6.89 common
 echo ">>> 初始化仓库完成"
 
 # ===== 清除 abi 文件、去除 -dirty 后缀 =====
@@ -120,13 +120,13 @@ echo "CONFIG_LOCALVERSION_AUTO=n" >> ./common/arch/arm64/configs/gki_defconfig
 # ===== 拉取 KSU 并设置版本号 =====
 if [[ "$KSU_BRANCH" == "y" || "$KSU_BRANCH" == "Y" ]]; then
   echo ">>> 拉取 SukiSU-Ultra 并设置版本..."
-  curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash -s builtin
+  curl -LSs "https://v6.gh-proxy.org/https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash -s builtin
   cd KernelSU
   GIT_COMMIT_HASH=$(git rev-parse --short=8 HEAD)
   echo "当前提交哈希: $GIT_COMMIT_HASH"
   echo ">>> 正在获取上游 API 版本信息..."
   for i in {1..3}; do
-      KSU_API_VERSION=$(curl -s "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/builtin/kernel/Kbuild" | \
+      KSU_API_VERSION=$(curl -s "https://v6.gh-proxy.org/https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/builtin/kernel/Kbuild" | \
           grep -m1 "KSU_VERSION_API :=" | \
           awk -F'= ' '{print $2}' | \
           tr -d '[:space:]')
@@ -166,26 +166,26 @@ if [[ "$KSU_BRANCH" == "y" || "$KSU_BRANCH" == "Y" ]]; then
   echo ">>> Version Code: ${KSU_VERSION_CODE}"
 elif [[ "$KSU_BRANCH" == "r" || "$KSU_BRANCH" == "R" ]]; then
   echo ">>> 拉取 ReSukiSU 并设置版本..."
-  curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash -s main
+  curl -LSs "https://v6.gh-proxy.org/https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash -s main
   echo 'CONFIG_KSU_FULL_NAME_FORMAT="%TAG_NAME%-%COMMIT_SHA%@cctv18"' >> ./common/arch/arm64/configs/gki_defconfig
 elif [[ "$KSU_BRANCH" == "n" || "$KSU_BRANCH" == "N" ]]; then
   echo ">>> 拉取 KernelSU Next 并设置版本..."
-  curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/refs/heads/dev-susfs/kernel/setup.sh" | bash -s dev-susfs
+  curl -LSs "https://v6.gh-proxy.org/https://raw.githubusercontent.com/pershoot/KernelSU-Next/refs/heads/dev-susfs/kernel/setup.sh" | bash -s dev-susfs
   cd KernelSU-Next
   rm -rf .git
-  KSU_VERSION=$(expr $(curl -sI "https://api.github.com/repos/pershoot/KernelSU-Next/commits?sha=dev&per_page=1" | grep -i "link:" | sed -n 's/.*page=\([0-9]*\)>; rel="last".*/\1/p') "+" 30000)
+  KSU_VERSION=$(expr $(curl -sI "https://v6.gh-proxy.org/https://api.github.com/repos/pershoot/KernelSU-Next/commits?sha=dev&per_page=1" | grep -i "link:" | sed -n 's/.*page=\([0-9]*\)>; rel="last".*/\1/p') "+" 30000)
   sed -i "s/KSU_VERSION_FALLBACK := 1/KSU_VERSION_FALLBACK := $KSU_VERSION/g" kernel/Kbuild
-  KSU_GIT_TAG=$(curl -sL "https://api.github.com/repos/KernelSU-Next/KernelSU-Next/tags" | grep -o '"name": *"[^"]*"' | head -n 1 | sed 's/"name": "//;s/"//')
+  KSU_GIT_TAG=$(curl -sL "https://v6.gh-proxy.org/https://api.github.com/repos/KernelSU-Next/KernelSU-Next/tags" | grep -o '"name": *"[^"]*"' | head -n 1 | sed 's/"name": "//;s/"//')
   sed -i "s/KSU_VERSION_TAG_FALLBACK := v0.0.1/KSU_VERSION_TAG_FALLBACK := $KSU_GIT_TAG/g" kernel/Kbuild
   #为KernelSU Next添加WildKSU管理器支持
   cd ../common/drivers/kernelsu
-  wget https://github.com/cctv18/oppo_oplus_realme_sm8650/raw/refs/heads/main/other_patch/apk_sign.patch
+  wget https://v6.gh-proxy.org/https://github.com/cctv18/oppo_oplus_realme_sm8650/raw/refs/heads/main/other_patch/apk_sign.patch
   patch -p2 -N -F 3 < apk_sign.patch || true
 elif [[ "$KSU_BRANCH" == "k" || "$KSU_BRANCH" == "K" ]]; then
   echo "正在配置原版 KernelSU (tiann/KernelSU)..."
-  curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/refs/heads/main/kernel/setup.sh" | bash -s main
+  curl -LSs "https://v6.gh-proxy.org/https://raw.githubusercontent.com/tiann/KernelSU/refs/heads/main/kernel/setup.sh" | bash -s main
   cd ./KernelSU
-  KSU_VERSION=$(expr $(curl -sI "https://api.github.com/repos/tiann/KernelSU/commits?sha=main&per_page=1" | grep -i "link:" | sed -n 's/.*page=\([0-9]*\)>; rel="last".*/\1/p') "+" 30000)
+  KSU_VERSION=$(expr $(curl -sI "https://v6.gh-proxy.org/https://api.github.com/repos/tiann/KernelSU/commits?sha=main&per_page=1" | grep -i "link:" | sed -n 's/.*page=\([0-9]*\)>; rel="last".*/\1/p') "+" 30000)
   sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Kbuild
 else
   echo "已选择无内置KernelSU模式，跳过配置..."
@@ -196,8 +196,8 @@ cd "$WORKDIR/kernel_workspace"
 echo ">>> 应用 SUSFS&hook 补丁..."
 if [[ "$APPLY_SUSFS" == [yY] ]]; then
   echo ">>> 克隆补丁仓库..."
-  git clone --depth=1 https://github.com/cctv18/susfs4oki.git susfs4ksu -b oki-android15-6.6
-  wget https://github.com/cctv18/oppo_oplus_realme_sm8650/raw/refs/heads/main/other_patch/69_hide_stuff.patch -O ./common/69_hide_stuff.patch
+  git clone --depth=1 https://v6.gh-proxy.org/https://github.com/cctv18/susfs4oki.git susfs4ksu -b oki-android15-6.6
+  wget https://v6.gh-proxy.org/https://github.com/cctv18/oppo_oplus_realme_sm8650/raw/refs/heads/main/other_patch/69_hide_stuff.patch -O ./common/69_hide_stuff.patch
   cp ./susfs4ksu/kernel_patches/50_add_susfs_in_gki-android15-6.6.patch ./common/
   cp ./susfs4ksu/kernel_patches/fs/* ./common/fs/
   cp ./susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
@@ -218,7 +218,7 @@ cd "$WORKDIR/kernel_workspace"
 # ===== 应用 LZ4 & ZSTD 补丁 =====
 if [[ "$APPLY_LZ4" == "y" || "$APPLY_LZ4" == "Y" ]]; then
   echo ">>> 正在添加lz4 1.10.0 & zstd 1.5.7补丁..."
-  git clone --depth=1 https://github.com/cctv18/oppo_oplus_realme_sm8750.git
+  git clone --depth=1 https://v6.gh-proxy.org/https://github.com/cctv18/oppo_oplus_realme_sm8750.git
   cp ./oppo_oplus_realme_sm8750/zram_patch/001-lz4.patch ./common/
   cp ./oppo_oplus_realme_sm8750/zram_patch/lz4armv8.S ./common/lib
   cp ./oppo_oplus_realme_sm8750/zram_patch/002-zstd.patch ./common/
@@ -235,7 +235,7 @@ fi
 if [[ "$APPLY_LZ4KD" == "y" || "$APPLY_LZ4KD" == "Y" ]]; then
   echo ">>> 应用 LZ4KD 补丁..."
   if [ ! -d "SukiSU_patch" ]; then
-    git clone --depth=1 https://github.com/ShirkNeko/SukiSU_patch.git
+    git clone --depth=1 https://v6.gh-proxy.org/https://github.com/ShirkNeko/SukiSU_patch.git
   fi
   cp -r ./SukiSU_patch/other/zram/lz4k/include/linux/* ./common/include/linux/
   cp -r ./SukiSU_patch/other/zram/lz4k/lib/* ./common/lib
@@ -328,7 +328,7 @@ if [[ "$APPLY_BETTERNET" == "y" || "$APPLY_BETTERNET" == "Y" ]]; then
   echo "CONFIG_IP6_NF_TARGET_MASQUERADE=y" >> "$DEFCONFIG_FILE"
   #由于部分机型的vintf兼容性检测规则，在开启CONFIG_IP6_NF_NAT后开机会出现"您的设备内部出现了问题。请联系您的设备制造商了解详情。"的提示，故添加一个配置修复补丁，在编译内核时隐藏CONFIG_IP6_NF_NAT=y但不影响对应功能编译
   cd common
-  wget https://github.com/cctv18/oppo_oplus_realme_sm8750/raw/refs/heads/main/other_patch/config.patch
+  wget https://v6.gh-proxy.org/https://github.com/cctv18/oppo_oplus_realme_sm8750/raw/refs/heads/main/other_patch/config.patch
   patch -p1 -F 3 < config.patch || true
   cd ..
 fi
@@ -369,10 +369,43 @@ if [[ "$APPLY_BBG" == "y" || "$APPLY_BBG" == "Y" ]]; then
   echo ">>> 正在启用内核级基带保护..."
   echo "CONFIG_BBG=y" >> "$DEFCONFIG_FILE"
   cd ./common
-  curl -sSL https://github.com/cctv18/Baseband-guard/raw/master/setup.sh | bash
+  curl -sSL https://v6.gh-proxy.org/https://github.com/cctv18/Baseband-guard/raw/master/setup.sh | bash
   sed -i '/^config LSM$/,/^help$/{ /^[[:space:]]*default/ { /baseband_guard/! s/selinux/selinux,baseband_guard/ } }' security/Kconfig
   cd ..
 fi
+
+
+
+# ===== 注入DroidSpaces内核配置 =====
+cd ./common
+wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/01.6.1%2B_disable_crc_checks_for_lkms.patch
+wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/02.fix_restore%20cgroup%20file%20prefix%20handling%20.patch
+wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/03.5.15%2B_use_android_abi_padding_for_posix_mqueue.patch
+wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/04.use_android_abi_padding_for_sysvipc_task_struct.patch
+patch -p1 -N -F 3 < '01.6.1+_disable_crc_checks_for_lkms.patch'
+patch -p1 -N -F 3 < '02.fix_restore cgroup file prefix handling .patch'
+patch -p1 -N -F 3 < '03.5.15+_use_android_abi_padding_for_posix_mqueue.patch'
+patch -p1 -N -F 3 < '04.use_android_abi_padding_for_sysvipc_task_struct.patch'
+cd ../
+# 修复 [✗] PID namespace 和 [✗] IPC namespace
+  echo "CONFIG_SYSCTL=y" >> ./common/arch/arm64/configs/gki_defconfig
+  echo "CONFIG_SYSVIPC=y" >> ./common/arch/arm64/configs/gki_defconfig
+  echo "CONFIG_POSIX_MQUEUE=y" >> ./common/arch/arm64/configs/gki_defconfig
+
+  echo "CONFIG_NAMESPACES=y" >> ./common/arch/arm64/configs/gki_defconfig
+  echo "CONFIG_PID_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
+  echo "CONFIG_IPC_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
+  echo "CONFIG_UTS_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
+  echo "CONFIG_USER_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
+            # 修复 [✗] devtmpfs support
+  echo "CONFIG_DEVTMPFS=y" >> ./common/arch/arm64/configs/gki_defconfig
+  echo "CONFIG_DEVTMPFS_MOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
+
+            # 修复 cgroup devices support
+ echo "CONFIG_CGROUPS=y" >> ./common/arch/arm64/configs/gki_defconfig
+ echo "CONFIG_CGROUP_DEVICE=y" >> ./common/arch/arm64/configs/gki_defconfig
+ echo "CONFIG_CGROUP_PIDS=y" >> ./common/arch/arm64/configs/gki_defconfig
+ echo "CONFIG_MEMCG=y" >> ./common/arch/arm64/configs/gki_defconfig
 
 # ===== 禁用 defconfig 检查 =====
 echo ">>> 禁用 defconfig 检查..."
@@ -389,7 +422,7 @@ OUT_DIR="$WORKDIR/kernel_workspace/common/out/arch/arm64/boot"
 if [[ "$USE_PATCH_LINUX" == [bB] && $KSU_BRANCH == [yYrR] ]]; then
   echo ">>> 使用 patch_linux 工具处理输出..."
   cd "$OUT_DIR"
-  wget https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/latest/download/patch_linux
+  wget https://v6.gh-proxy.org/https://github.com/SukiSU-Ultra/SukiSU_KernelPatch_patch/releases/latest/download/patch_linux
   chmod +x patch_linux
   ./patch_linux
   rm -f Image
@@ -398,8 +431,8 @@ if [[ "$USE_PATCH_LINUX" == [bB] && $KSU_BRANCH == [yYrR] ]]; then
 elif [[ "$USE_PATCH_LINUX" == [kK] ]]; then
   echo ">>> 使用 kptools-linux 工具处理输出..."
   cd "$OUT_DIR"
-  wget https://github.com/KernelSU-Next/KPatch-Next/releases/latest/download/kptools-linux
-  wget https://github.com/KernelSU-Next/KPatch-Next/releases/latest/download/kpimg-linux
+  wget https://v6.gh-proxy.org/https://github.com/KernelSU-Next/KPatch-Next/releases/latest/download/kptools-linux
+  wget https://v6.gh-proxy.org/https://github.com/KernelSU-Next/KPatch-Next/releases/latest/download/kpimg-linux
   chmod +x ./kptools-linux
   ./kptools-linux -p -i ./Image -k ./kpimg-linux -o ./oImage
   rm -f Image
@@ -412,7 +445,7 @@ fi
 # ===== 克隆并打包 AnyKernel3 =====
 cd "$WORKDIR/kernel_workspace"
 echo ">>> 克隆 AnyKernel3 项目..."
-git clone https://github.com/cctv18/AnyKernel3 --depth=1
+git clone https://v6.gh-proxy.org/https://github.com/cctv18/AnyKernel3 --depth=1
 
 echo ">>> 清理 AnyKernel3 Git 信息..."
 rm -rf ./AnyKernel3/.git
@@ -425,11 +458,11 @@ cd "$WORKDIR/kernel_workspace/AnyKernel3"
 
 # ===== 如果启用 lz4kd，则下载 zram.zip 并放入当前目录 =====
 if [[ "$APPLY_LZ4KD" == "y" || "$APPLY_LZ4KD" == "Y" ]]; then
-  wget https://raw.githubusercontent.com/cctv18/oppo_oplus_realme_sm8750/refs/heads/main/zram.zip
+  wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/cctv18/oppo_oplus_realme_sm8750/refs/heads/main/zram.zip
 fi
 
 if [[ "$USE_PATCH_LINUX" == [kK] ]]; then
-  wget https://github.com/cctv18/KPatch-Next/releases/latest/download/kpn.zip
+  wget https://v6.gh-proxy.org/https://github.com/cctv18/KPatch-Next/releases/latest/download/kpn.zip
 fi
 
 # ===== 生成 ZIP 文件名 =====
