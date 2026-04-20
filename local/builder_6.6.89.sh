@@ -378,34 +378,40 @@ fi
 
 # ===== 注入DroidSpaces内核配置 =====
 cd ./common
-wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/01.6.1%2B_disable_crc_checks_for_lkms.patch
-wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/02.fix_restore%20cgroup%20file%20prefix%20handling%20.patch
-wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/03.5.15%2B_use_android_abi_padding_for_posix_mqueue.patch
-wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/04.use_android_abi_padding_for_sysvipc_task_struct.patch
-patch -p1 -N -F 3 < '01.6.1+_disable_crc_checks_for_lkms.patch'
-patch -p1 -N -F 3 < '02.fix_restore cgroup file prefix handling .patch'
-patch -p1 -N -F 3 < '03.5.15+_use_android_abi_padding_for_posix_mqueue.patch'
-patch -p1 -N -F 3 < '04.use_android_abi_padding_for_sysvipc_task_struct.patch'
+#wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/01.6.1%2B_disable_crc_checks_for_lkms.patch
+#wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/02.fix_restore%20cgroup%20file%20prefix%20handling%20.patch
+#wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/03.5.15%2B_use_android_abi_padding_for_posix_mqueue.patch
+#wget https://v6.gh-proxy.org/https://raw.githubusercontent.com/ravindu644/Droidspaces-OSS/refs/heads/main/Documentation/resources/kernel-patches/GKI/04.use_android_abi_padding_for_sysvipc_task_struct.patch
+#patch -p1 -N -F 3 < '/home/steve88910/project/oppo_oplus_realme_sm8750_droidspaces/kernelpatch/01.6.1+_disable_crc_checks_for_lkms.patch'
+#patch -p1 -N -F 3 < '/home/steve88910/project/oppo_oplus_realme_sm8750_droidspaces/kernelpatch/02.fix_restore cgroup file prefix handling .patch'
+#patch -p1 -N -F 3 < '/home/steve88910/project/oppo_oplus_realme_sm8750_droidspaces/kernelpatch/03.5.15+_use_android_abi_padding_for_posix_mqueue.patch'
+#patch -p1 -N -F 3 < '/home/steve88910/project/oppo_oplus_realme_sm8750_droidspaces/kernelpatch/04.use_android_abi_padding_for_sysvipc_task_struct.patch'
+#patch -p1 -N -F 3 < '01.6.1+_disable_crc_checks_for_lkms.patch'
+#patch -p1 -N -F 3 < '02.fix_restore cgroup file prefix handling .patch'
+#patch -p1 -N -F 3 < '03.5.15+_use_android_abi_padding_for_posix_mqueue.patch'
+#patch -p1 -N -F 3 < '04.use_android_abi_padding_for_sysvipc_task_struct.patch'
+#wget https://github.com/realme-kernel-opensource/realme_GT7pro-AndroidB-common-source/commit/5fdd9a9c820fd4e2f6feb5882965c9dfcda2def1.patch
+patch -p1 -N -F 3 < '/home/steve88910/project/oppo_oplus_realme_sm8750_droidspaces/kernelpatch/5fdd9a9c820fd4e2f6feb5882965c9dfcda2def1.patch'
 cd ../
 # 修复 [✗] PID namespace 和 [✗] IPC namespace
-  echo "CONFIG_SYSCTL=y" >> ./common/arch/arm64/configs/gki_defconfig
-  echo "CONFIG_SYSVIPC=y" >> ./common/arch/arm64/configs/gki_defconfig
-  echo "CONFIG_POSIX_MQUEUE=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_SYSCTL=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_SYSVIPC=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_POSIX_MQUEUE=y" >> ./common/arch/arm64/configs/gki_defconfig
 
-  echo "CONFIG_NAMESPACES=y" >> ./common/arch/arm64/configs/gki_defconfig
-  echo "CONFIG_PID_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
-  echo "CONFIG_IPC_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
-  echo "CONFIG_UTS_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
-  echo "CONFIG_USER_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_NAMESPACES=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_PID_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_IPC_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_UTS_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_USER_NS=y" >> ./common/arch/arm64/configs/gki_defconfig
             # 修复 [✗] devtmpfs support
-  echo "CONFIG_DEVTMPFS=y" >> ./common/arch/arm64/configs/gki_defconfig
-  echo "CONFIG_DEVTMPFS_MOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_DEVTMPFS=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_DEVTMPFS_MOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
 
             # 修复 cgroup devices support
- echo "CONFIG_CGROUPS=y" >> ./common/arch/arm64/configs/gki_defconfig
- echo "CONFIG_CGROUP_DEVICE=y" >> ./common/arch/arm64/configs/gki_defconfig
- echo "CONFIG_CGROUP_PIDS=y" >> ./common/arch/arm64/configs/gki_defconfig
- echo "CONFIG_MEMCG=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_CGROUPS=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_CGROUP_DEVICE=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_CGROUP_PIDS=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo "CONFIG_MEMCG=y" >> ./common/arch/arm64/configs/gki_defconfig
 
 # ===== 禁用 defconfig 检查 =====
 echo ">>> 禁用 defconfig 检查..."
