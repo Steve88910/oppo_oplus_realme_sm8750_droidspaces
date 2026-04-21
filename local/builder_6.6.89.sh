@@ -374,6 +374,14 @@ if [[ "$APPLY_BBG" == "y" || "$APPLY_BBG" == "Y" ]]; then
   cd ..
 fi
 
+# ===== 合并nssync =====
+cd ./common
+patch -p1 -N -F 3 < '/home/steve88910/project/oppo_oplus_realme_sm8750_droidspaces/kernelpatch/ntsync_base.patch'
+patch -p1 -N -F 3 < '/home/steve88910/project/oppo_oplus_realme_sm8750_droidspaces/kernelpatch/ntsync_compat_android15-6.6.patch'
+cd ../
+echo "CONFIG_NTSYNC=y" >> ./common/arch/arm64/configs/gki_defconfig
+echo ">>> 已成功合并ntsync补丁！"
+
 
 
 # ===== 注入DroidSpaces内核配置 =====
@@ -412,6 +420,8 @@ echo "CONFIG_CGROUPS=y" >> ./common/arch/arm64/configs/gki_defconfig
 echo "CONFIG_CGROUP_DEVICE=y" >> ./common/arch/arm64/configs/gki_defconfig
 echo "CONFIG_CGROUP_PIDS=y" >> ./common/arch/arm64/configs/gki_defconfig
 echo "CONFIG_MEMCG=y" >> ./common/arch/arm64/configs/gki_defconfig
+
+echo ">>> 已成功注入DroidSpaces内核配置补丁！"
 
 # ===== 禁用 defconfig 检查 =====
 echo ">>> 禁用 defconfig 检查..."
