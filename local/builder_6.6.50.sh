@@ -151,7 +151,7 @@ if [[ "$APPLY_SUSFS" == [yY] ]]; then
   cp ./susfs4ksu/kernel_patches/fs/* ./common/fs/
   cp ./susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
   cd ./common
-  patch -p1 < 50_add_susfs_in_gki-android15-6.6.patch || true
+  patch -p1 -F 3 < 50_add_susfs_in_gki-android15-6.6.patch || true
   patch -p1 -F 3 < 69_hide_stuff.patch || true
 else
   echo ">>> 未开启susfs，跳过susfs补丁配置..."
@@ -160,7 +160,7 @@ cd "$WORKDIR/kernel_workspace"
 if [[ "$KSU_BRANCH" == [kK] && "$APPLY_SUSFS" == [yY] ]]; then
   cp ./susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU/
   cd ./KernelSU
-  patch -p1 < 10_enable_susfs_for_ksu.patch || true
+  patch -p1 -F 3 < 10_enable_susfs_for_ksu.patch || true
 fi
 cd "$WORKDIR/kernel_workspace"
 
@@ -175,7 +175,7 @@ if [[ "$APPLY_LZ4" == "y" || "$APPLY_LZ4" == "Y" ]]; then
   cd "$WORKDIR/kernel_workspace/common"
   git apply -p1 < 001-lz4.patch || true
   git apply -p1 < 001-lz4-clearMake.patch || true
-  patch -p1 < 002-zstd.patch || true
+  patch -p1 -F 3 < 002-zstd.patch || true
   cd "$WORKDIR/kernel_workspace"
 else
   echo ">>> 跳过 LZ4&ZSTD 补丁..."
@@ -233,6 +233,12 @@ echo "CONFIG_TMPFS_POSIX_ACL=y" >> "$DEFCONFIG_FILE"
 echo "CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y" >> "$DEFCONFIG_FILE"
 #跳过将uapi标准头安装到 usr/include 目录的不必要操作，节省编译时间
 echo "CONFIG_HEADERS_INSTALL=n" >> "$DEFCONFIG_FILE"
+
+# 应用 CVE_2026_43499 修复补丁
+cd common
+wget https://github.com/cctv18/oppo_oplus_realme_sm8750/raw/refs/heads/main/other_patch/cve-2026-43499-rtmutex-6.6.patch
+patch -p1 -F 3 < cve-2026-43499-rtmutex-6.6.patch
+cd ..
 
 # 仅在启用了 LZ4KD 补丁时添加相关算法支持
 if [[ "$APPLY_LZ4KD" == "y" || "$APPLY_LZ4KD" == "Y" ]]; then
@@ -302,6 +308,7 @@ if [[ "$APPLY_DROIDSPACES" == [sSeE] ]]; then
   # 开启 Droidspaces 容器所需内核支持
   echo "CONFIG_PID_NS=y" >> "$DEFCONFIG_FILE"
   echo "CONFIG_IPC_NS=y" >> "$DEFCONFIG_FILE"
+  echo "CONFIG_USER_NS=y" >> "$DEFCONFIG_FILE"
   echo "CONFIG_SYSVIPC=y" >> "$DEFCONFIG_FILE"
   echo "CONFIG_DEVTMPFS=y" >> "$DEFCONFIG_FILE"
   echo "CONFIG_NAMESPACES=y" >> "$DEFCONFIG_FILE"
